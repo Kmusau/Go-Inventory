@@ -8,11 +8,14 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
+//Read all products in the catalog
 func GetAllProducts(c *fiber.Ctx) error {
 	var products []models.Product
 	database.DB.Preload("Order").Find(&products)
 	return c.JSON(&products)
 }
+
+//function to find first. find only a single item with id
 func FindProduct(id int, product *models.Product) error {
 	database.DB.Find(&product, "id = ?", id)
 
@@ -23,6 +26,8 @@ func FindProduct(id int, product *models.Product) error {
 	}
 	return nil
 }
+
+//read a single product
 func GetProduct(c *fiber.Ctx) error {
 	id, err := c.ParamsInt("id")
 	var product models.Product
@@ -34,6 +39,7 @@ func GetProduct(c *fiber.Ctx) error {
 	return c.JSON(product)
 }
 
+//Add a product to the catalog
 func CreateProduct(c *fiber.Ctx) error {
 	product := new(models.Product)
 
@@ -45,6 +51,7 @@ func CreateProduct(c *fiber.Ctx) error {
 	return c.JSON(&product)
 }
 
+//Update / edit product name
 func UpdateProduct(c *fiber.Ctx) error {
 	id := c.Params("id")
 	product := new(models.Product)
@@ -63,6 +70,7 @@ func UpdateProduct(c *fiber.Ctx) error {
 	return c.JSON(&product)
 }
 
+//Delete a product
 func Deleteproduct(c *fiber.Ctx) error {
 	id := c.Params("id")
 	var product models.Product
